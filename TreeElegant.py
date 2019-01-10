@@ -1,40 +1,63 @@
 import turtle
 import numpy as np
-
+MAXRAM = 6 # higher MAXRAM, more green detailed branches and more time.
+OMMIT = 1 # higher OMMIT more probabilities to ommit a branch, values 0 (print all) to 10 (ommit all).
+GreenMIN = 4 # Branches won´t be printed under this value, brach width.
 
 def angleMeth(): # In the future could give an Aur angle, random
-	return np.random.uniform(20,90)
+	Aur=1.6180339887
+	ang=360
+	array=[]
+	i=0
+	while ang > 10:
+		ang=ang/(Aur)
+		if ang < 120:
+			array.append(ang)
+			i=i+1
+
+	return array[np.random.randint(0, i)]
 
 def ArrAur(array, branchLen): # ArrAur creates an array of Aur proportions for a given lengh
-	#Aur=1.6180339887
+	Aur=1.6180339887
 	auxlong = branchLen
-	Aur=1.600 + np.random.uniform(0,0.036)
+	#Aur=1.600 + np.random.uniform(0,0.036)
 	array.append(auxlong)
 	i=1
-	while auxlong > 3:
-		auxlong=auxlong/Aur
+	while auxlong > GreenMIN:
+		auxlong=auxlong/(Aur)
 		array.append(auxlong)
 		i=i+1
 	return i
 
 def CreateBranchRight(branchLen,t, ram):
-	if ram < 3:
+	if ram < MAXRAM and branchLen > GreenMIN and np.random.uniform(0,10) > OMMIT:
+		desvio = np.random.uniform(0,branchLen/4.2360) # /4.2360 == Aur*Aur*Aur
+		t.up()
+		t.backward(desvio)
 		anr = angleMeth() # Angle to right
 		t.right(anr)
 		ramaux=ram
 		Branches(branchLen,t, ramaux)
 		t.left(anr)
+		t.up()
+		t.forward(desvio)
 
 def CreateBranchLeft(branchLen,t, ram):
-	if ram < 3:
+	if ram < MAXRAM and branchLen > GreenMIN and np.random.uniform(0,10) > OMMIT:
+		desvio = np.random.uniform(0,branchLen/4.2360)
+		t.up()
+		t.backward(desvio)
 		anl = angleMeth() # Angle to left
 		t.left(anl)
 		ramaux=ram
 		Branches(branchLen,t, ramaux)
 		t.right(anl)
+		t.up()
+		t.forward(desvio)
 
-def SetWidColor(t, branchLen):
-	wid=branchLen/13
+def SetWidColor(t, branchLen, banchAlt): # banchAlt parameter, is the long of the piece of branch to be painted
+	wid= (branchLen/30) + (banchAlt/16)
+
 	t.width(wid)
 
 	if branchLen < 17: # Set the colour, depend on the long branch
@@ -53,9 +76,9 @@ def Branches(branchLen,t, ram):
 	
 	Total=0
 	i = 1
-	while i < len:
+	while i < len and array[i] > GreenMIN:
 
-		SetWidColor(t, branchLen)
+		SetWidColor(t, branchLen,array[i])
 		t.down()
 		t.forward(array[i])
 		CreateBranchRight(array[i],t, ram)
@@ -78,7 +101,7 @@ def tree(branchLen,t, ram):
 	i = 1
 	while i < len:
 
-		SetWidColor(t, branchLen)
+		SetWidColor(t, branchLen, array[i])
 		t.down()	
 		t.forward(array[i])
 		CreateBranchRight(array[i],t, ram)
@@ -97,7 +120,7 @@ def tree(branchLen,t, ram):
 	
 def main():
 
-	LONGINI=165
+	LONGINI=265
 	ram=0
 	t = turtle.Turtle()
 	t.color("#331900")
