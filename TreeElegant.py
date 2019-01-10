@@ -2,7 +2,7 @@ import turtle
 import numpy as np
 
 MAXRAM = 10 # higher MAXRAM, more green detailed branches and more time.
-OMMIT = 1 # higher OMMIT more probabilities to ommit a branch, values 0 (print all) to 10 (ommit all).
+OMMIT = 3 # higher OMMIT more probabilities to ommit a branch, values 0 (print all) to 10 (ommit all).
 GreenMIN = 4 # Branches won´t be printed under this value, brach width.
 
 def angleMeth(): # In the future could give an Aur angle, random
@@ -78,9 +78,9 @@ def SetWidColor(t, branchLen, banchAlt, ram): # banchAlt parameter, is the long 
 	if branchLen < 17: # Set the colour, depend on the long branch
 		t.color("#006600") #Green
 	else:
-		t.color("#331900") #Brown
+		t.color("#341900") #Brown
 		if ram==1:
-			t.color("#431900") #Brown
+			t.color("#331900") #Brown
 
 	return wid
 
@@ -101,6 +101,9 @@ def Branches(branchLen,t, ram):
 		t.forward(array[i])
 		CreateBranchRight(array[i],t, ram)
 		CreateBranchLeft(array[i],t, ram)
+		CreateBranchRight(array[i],t, ram)
+		CreateBranchLeft(array[i],t, ram)
+
 		t.up()
 		t.backward(array[i])
 		i=i+1
@@ -111,8 +114,8 @@ def tree(branchLen,t, ram):
 
 	ram = ram+1
 	array=[]
-	len = ArrAur2(array, branchLen)
-	print(array)
+	len = ArrAur(array, branchLen)
+	#print(array)
 	#t.forward(branchLen)
 	Total=0
 	i = 1
@@ -121,6 +124,8 @@ def tree(branchLen,t, ram):
 		SetWidColor(t, branchLen, array[i], ram)
 		t.down()	
 		t.forward(array[i])
+		CreateBranchRight(array[i],t, ram)
+		CreateBranchLeft(array[i],t, ram)
 		CreateBranchRight(array[i],t, ram)
 		CreateBranchLeft(array[i],t, ram)
 
