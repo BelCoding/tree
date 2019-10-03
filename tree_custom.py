@@ -2,11 +2,10 @@ import turtle
 import numpy as np
 AUR=1.6180339887 # AUR is the golden number in Spanish número aúreo
 MAX_BRANCH_DEPTH = 5 # as higher MAX_BRANCH_DEPTH, more green detailed branches and more time required.
-OMMIT = 2 # as higher OMMIT more probabilities to ommit a branch, values 0 (print all) to 10 (ommit all).
+OMMIT = 2 # as higher OMMIT more probabilities to ommit a branch, values 0 (print all) to 10/MAX_BRANCH_DEPTH (ommit all).
 
 INI_LEN = 100
 LEN_MIN = 0.035*INI_LEN # shorter branches won´t be printed under this value
-GREEN = 0.1*INI_LEN # shorter branches will be green under this value
 
 array_golden_angle=[]
 arraylengths=[]
@@ -48,7 +47,7 @@ def create_golden_array(branch_len):
 
 def create_branch_right(branch_len,t, branch_counter):
     
-	if np.random.uniform(0,10) > OMMIT and branch_counter < MAX_BRANCH_DEPTH and branch_len > LEN_MIN:
+	if np.random.uniform(0,10) > branch_counter*OMMIT and branch_counter < MAX_BRANCH_DEPTH and branch_len > LEN_MIN:
 		deviation = np.random.uniform(0,branch_len/4.2360) # 4.2360 == AUR*AUR*AUR
 		t.up()
 		t.backward(deviation)
@@ -62,7 +61,7 @@ def create_branch_right(branch_len,t, branch_counter):
 
 def create_branch_left(branch_len,t, branch_counter):
     
-	if np.random.uniform(0,10) > OMMIT and branch_counter < MAX_BRANCH_DEPTH and branch_len > LEN_MIN:
+	if np.random.uniform(0,10) > branch_counter*OMMIT and branch_counter < MAX_BRANCH_DEPTH and branch_len > LEN_MIN:
 		deviation = np.random.uniform(0,branch_len/4.2360)
 		t.up()
 		t.backward(deviation)
@@ -79,7 +78,7 @@ def set_branch_color(t, branch_len, banchAlt, branch_counter):
     # banchAlt pabranch_countereter, is the length of the piece of branch to be painted
 	t.width((branch_len/30) + (banchAlt/16))
 
-	if branch_len < GREEN: # Set the colour, depend on the long branch
+	if branch_counter > MAX_BRANCH_DEPTH-2: # Set the colour, depend on the long branch
 		t.color("#006600") #Green
 	else:
 		t.color("#341900") #Brown
